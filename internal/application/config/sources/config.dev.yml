@@ -1,0 +1,16 @@
+application:
+  environment: ${ENVIRONMENT}
+  params:
+
+  server:
+    host: 127.0.0.1
+    port: 8080
+    timeout: 5
+
+  database:
+    name: ${DATABASE_NAME}
+    host: ${DATABASE_HOST}
+    port: ${DATABASE_PORT}
+    user: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+
