@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 const (
@@ -19,9 +18,9 @@ type Config struct {
 		Environment string      `yaml:"environment"`
 		Params      interface{} `yaml:"params"`
 		Server      struct {
-			Host    string        `yaml:"host"`
-			Port    int           `yaml:"port"`
-			Timeout time.Duration `yaml:"timeout"`
+			Host    string `yaml:"host"`
+			Port    int64  `yaml:"port"`
+			Timeout int64  `yaml:"timeout"`
 		} `yaml:"server"`
 		Database struct {
 			Name     string `yaml:"name"`

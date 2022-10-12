@@ -2,33 +2,45 @@ package main
 
 import (
 	"context"
-	"github.com/joho/godotenv"
-	"golang-project-template/internal/application/app"
-	"golang-project-template/internal/application/config"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
+
+	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+
+	"golang-project-template/internal/application/app"
+	"golang-project-template/internal/application/config"
+	"golang-project-template/internal/infrastructure/storage"
 )
 
 func init() {
 	err := godotenv.Load("../../.env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logrus.Fatal("Error loading .env file")
 	}
 }
 
 func main() {
 	var runChan = make(chan os.Signal, 1)
+	cfg := config.GetConfig()
+	log := logrus.New()
+	st := storage.NewStorage(cfg)
 
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		config.GetConfig().Application.Server.Timeout,
+		time.Duration(cfg.Application.Server.Timeout),
 	)
 	defer cancel()
 
 	// Create app instance
-	app := app.Create(ctx, config.GetConfig())
+	app := app.Create(
+		&ctx,
+		cfg,
+		st,
+		log,
+	)
 
 	// Handle ctrl+c/ctrl+x interrupt
 	signal.Notify(runChan, os.Interrupt, syscall.SIGTSTP)

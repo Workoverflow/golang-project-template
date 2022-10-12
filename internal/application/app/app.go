@@ -2,21 +2,30 @@ package app
 
 import (
 	"context"
+	"github.com/sirupsen/logrus"
 	"golang-project-template/internal/application/config"
 	"golang-project-template/internal/infrastructure/storage"
 )
 
 type Application struct {
-	Config *config.Config
-	Db     *storage.SqlxStorage
+	Ctx     *context.Context
+	Config  *config.Config
+	Storage *storage.SqlxStorage
+	Logger  *logrus.Logger
 }
 
-func Create(ctx context.Context, config *config.Config) *Application {
-	db := storage.NewStorage(config)
+func Create(
+	ctx *context.Context,
+	config *config.Config,
+	storage *storage.SqlxStorage,
+	log *logrus.Logger,
+) *Application {
 
 	return &Application{
-		Config: config,
-		Db:     db,
+		Ctx:     ctx,
+		Config:  config,
+		Storage: storage,
+		Logger:  log,
 	}
 }
 
